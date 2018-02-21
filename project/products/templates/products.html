@@ -2,6 +2,10 @@
 
 {% block content %}
 
+{% block head_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
 <form id='productsform' class="form-horizontal">
     <fieldset>
 
@@ -30,5 +34,11 @@
         </tr>
     </thead>
 </table>
+
+{% block tail_js %}
+    {{ super() }}
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{{url_for('static',filename='js/products.js')}}"></script>
+{% endblock %}
 
 {% endblock %}
