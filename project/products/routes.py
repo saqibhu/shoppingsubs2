@@ -4,7 +4,9 @@
 #### imports ####
 #################
  
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, request, jsonify
+
+import maindata
  
  
 ################
@@ -17,7 +19,12 @@ products_blueprint = Blueprint('products', __name__, template_folder='templates'
 ################
 #### routes ####
 ################
+
+@products_blueprint.route('/getproducts', methods=['POST'])
+def getproducts():
+    data = maindata.getProducts(request.form['searchItem'])
+    return jsonify(data)
  
-@products_blueprint.route('/')
-def index():
-    return render_template('index.html')
+@products_blueprint.route('/products', methods=['GET','POST'])
+def products():
+        return render_template('products.html')

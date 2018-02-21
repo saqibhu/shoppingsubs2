@@ -1,0 +1,34 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+
+<form id='productsform' class="form-horizontal">
+    <fieldset>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <div class="col-md-4">
+                <input id="inputProduct" name="inputProduct" type="text" placeholder="Enter product to search for" class="form-control">
+            </div>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="singlebutton"></label>
+            <div class="col-md-4">
+                <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Search" />
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+<table id='listProducts' class='table'>
+    <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+</table>
+
+{% endblock %}
