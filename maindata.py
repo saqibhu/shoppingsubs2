@@ -11,11 +11,4 @@ def getProducts(searchstring):
     response = requests.get(api % (searchstring), headers=headers)
     data = response.json()  
 
-    #print(data['uk']['ghs']['products']['results'])
-
-    #store the results in a file
-    #jsonfile = open('static/data.json','w')
-    #jsonfile.write(json.dumps(data['uk']['ghs']['products']['results'])) 
-    #jsonfile.close()
-
     return data['uk']['ghs']['products']['results']

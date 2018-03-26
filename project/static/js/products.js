@@ -12,7 +12,12 @@ $(document).ready(function(){
                 destroy: true,
                 data: productdata,
                 columns: [
-                    { data : 'name' }
+                    { data : 'name' },
+                    { data : 'price' },
+                    { data : 'image',
+                        "render": function(data, type, full, meta) {
+                        return '<img src="' + data + '" alt="' + data + '">';} 
+                    }
                 ]
             });
         })

@@ -15,7 +15,6 @@ import maindata
  
 products_blueprint = Blueprint('products', __name__, template_folder='templates')
  
- 
 ################
 #### routes ####
 ################
@@ -25,6 +24,6 @@ def getproducts():
     data = maindata.getProducts(request.form['searchItem'])
     return jsonify(data)
  
-@products_blueprint.route('/products', methods=['GET','POST'])
+@products_blueprint.route('/products', methods=['GET'])
 def products():
-        return render_template('products.html')
+    return render_template('products.html')

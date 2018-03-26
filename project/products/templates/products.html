@@ -3,7 +3,7 @@
 {% block content %}
 
 {% block head_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">-->
 {% endblock %}
 
 <form id='productsform' class="form-horizontal">
@@ -31,6 +31,8 @@
     <thead>
         <tr>
             <th>Name</th>
+            <th>Price</th>
+            <th>Image</th>
         </tr>
     </thead>
 </table>
