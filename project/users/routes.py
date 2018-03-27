@@ -1,18 +1,17 @@
 # project/users/routes.py
  
- 
 #################
 #### imports ####
 #################
  
-from flask import render_template, Blueprint, request, flash, redirect, url_for
+from flask import render_template, Blueprint, request, flash, redirect, url_for, session
 
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
-from functools import wraps
+import psycopg2.extras
 
 from project import conn
-import psycopg2.extras
+from helpers import is_logged_in
  
 ################
 #### config ####
@@ -20,9 +19,12 @@ import psycopg2.extras
  
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
-#Classes
+################
+#### classes ###
+################
+
 class RegisterForm(Form):
-    name = StringField('Name', [validators.Length(min=1, max=50)])
+    name = StringField('Fullname', [validators.Length(min=1, max=50)])
     email = StringField('Email', [validators.Length(min=6, max=50)])
     password = PasswordField('Password', [
         validators.DataRequired(),
@@ -30,14 +32,9 @@ class RegisterForm(Form):
         ])
     confirm = PasswordField('Confirm Password')
  
- 
 ################
 #### routes ####
 ################
- 
-@users_blueprint.route('/login')
-def login():
-    return render_template('login.html')
 
 @users_blueprint.route('/register', methods=['GET','POST'])
 def register():
@@ -47,7 +44,6 @@ def register():
         email = form.email.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        #sql bit
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("""insert into users (name, email, password) values (%s, %s, %s)""", (name, email, password))
         conn.commit()
@@ -56,3 +52,43 @@ def register():
         flash('You are now registered', 'success')
         return redirect(url_for('.login'))
     return render_template('register.html', form=form)
+ 
+@users_blueprint.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        #Get form fields
+        email = request.form['email']
+        password_candidate = request.form['password']
+
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute("""select * from users where email = '%s'""" % email)
+        result = cur.fetchone()
+
+        if result:
+            password = result['password']
+
+            #Compare password
+            if sha256_crypt.verify(password_candidate, password):
+                session['logged_in'] = True
+                session['name'] = result['name']
+
+                flash('You are now logged in', 'success')
+                return redirect(url_for('products.products'))
+            else:
+                error = 'Invalid password'
+                return render_template('login.html', error = error)
+
+            #Close connection
+            cur.close()
+        else:
+            error = 'Email address not found'
+            cur.close()
+            return render_template('login.html', error = error)
+    return render_template('login.html')
+
+@users_blueprint.route('/logout')
+@is_logged_in
+def logout():
+    session.clear()
+    flash('You are now logged out', 'success')
+    return redirect(url_for('.login'))

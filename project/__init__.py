@@ -16,7 +16,6 @@ app.config.from_pyfile('config.py')
 try:
     conn = psycopg2.connect(app.config['DATABASE_URI'])
     print('Connected the database')
-    print(conn)
 except:
     print('unable to connect to the database')
 
