@@ -30,17 +30,19 @@
 <table id='listProducts' class='table'>
     <thead>
         <tr>
+            <th>Subscribed</th>
             <th>Name</th>
             <th>Price</th>
             <th>Image</th>
+            <th>Subscription</th>
         </tr>
     </thead>
 </table>
 
-{% block tail_js %}
+<!--{% block tail_js %}
     {{ super() }}
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="{{url_for('static',filename='js/products.js')}}"></script>
-{% endblock %}
+{% endblock %}-->
 
 {% endblock %}
